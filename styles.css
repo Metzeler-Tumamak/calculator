@@ -7,3 +7,25 @@
 body {
   min-height: 100vh;
 }
+
+.flex {
+  display: flex;
+}
+
+#container {
+  width: 500px;
+  background-color: grey;
+  padding: 32px;
+}
+
+input {
+  text-align: right;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 20px;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+}
