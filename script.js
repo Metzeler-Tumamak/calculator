@@ -66,7 +66,9 @@ function operate(operator) {
 
   if (expression) {
     total = processArithmethic(...expression.slice(1));
-    total = Number.isFinite(total) ? total : "That is not allowed";
+    total = Number.isFinite(total)
+      ? Number(total.toFixed(5))
+      : "That is not allowed";
     displayValue = total;
   }
 
