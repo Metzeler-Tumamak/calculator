@@ -102,7 +102,7 @@ function appendChar(char) {
 
   const displayValueArr = displayValue.match(operandRegExp);
 
-  const lessThanOneFloat = /^0\./;
+  const lessThanOneFloat = /^\d+\./;
 
   if (displayValueArr.length > 1) {
     display.value = displayValueArr
