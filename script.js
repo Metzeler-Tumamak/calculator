@@ -1,56 +1,54 @@
 const display = document.querySelector("input");
 const container = document.querySelector("#container");
+
 let total = 0;
+let leftHandOperand = 0;
+let rightHandOperand = 0;
 let clearDisplay = false;
 let lastOperation = null;
-let lastOperand = null;
+let repeatingValue = null;
+let activeOperator = null;
 
 function appendCharacter(char) {
-  if (clearDisplay) {
+  // if (clearDisplay) {
+  //   display.value = "";
+  //   clearDisplay = false;
+  // }
+  if (activeOperator) {
     display.value = "";
-    clearDisplay = false;
+    activeOperator.classList.toggle("active");
   }
   displayValue = display.value;
   display.value = displayValue.startsWith("0") ? char : displayValue + char;
+  rightHandOperand = Number(display.value);
 }
 
-function processArithmetic(operator, rightHandOperand = null) {
-  if (operator === "=") {
-    processArithmetic(lastOperation, lastOperand);
-    return;
-  }
-
-  // let displayVal = 0;
-  // if (operator !== lastOperation && lastOperation !== null) {
-  //   displayVal = 0;
-  // } else {
-  //   displayVal = rightHandOperand ?? Number(display.value);
+function processArithmetic(operator) {
+  // if (activeOperator === null) {
+  //   return;
   // }
 
-  if (lastOperation === null) {
+  if (!lastOperation) {
     lastOperation = operator;
   }
 
-  const displayVal = rightHandOperand ?? Number(display.value);
-
   switch (lastOperation) {
     case "+":
-      total += displayVal;
+      total = leftHandOperand + rightHandOperand;
       break;
     case "-":
-      total -= displayVal;
-      break;
-    case "*":
-      total *= displayVal;
-      break;
-    case "/":
-      total /= displayVal;
+      total = leftHandOperand - rightHandOperand;
       break;
   }
-  lastOperand = displayVal;
-  lastOperation = operator;
+  leftHandOperand = total;
   display.value = total.toString();
-  clearDisplay = true;
+  lastOperation = operator;
+}
+
+function equalsOperation() {
+  if (!lastOperation) return;
+  processArithmetic(lastOperation);
+  activeOperator.classList.remove("active");
 }
 
 container.addEventListener("click", (event) => {
@@ -58,12 +56,24 @@ container.addEventListener("click", (event) => {
   const buttonTypes = {
     number: appendCharacter,
     arithmetic: processArithmetic,
+    equals: equalsOperation,
     fn: null,
   };
 
   const buttonType = Object.keys(buttonTypes).find((type) =>
     btnRef.classList.contains(type)
   );
+
+  if (buttonType === "arithmetic") {
+    activeOperator = document.querySelector(".arithmetic.active");
+
+    if (activeOperator && activeOperator !== btnRef) {
+      activeOperator.classList.toggle("active");
+    }
+
+    btnRef.classList.toggle("active");
+    activeOperator = btnRef;
+  }
 
   buttonTypes[buttonType](btnRef.textContent);
 });
