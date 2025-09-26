@@ -66,7 +66,7 @@ function operate(operator) {
 
   if (expression) {
     total = processArithmethic(...expression.slice(1));
-    total = Number.isFinite(total) ? total.toFixed(10) : "That is not allowed";
+    total = Number.isFinite(total) ? total : "That is not allowed";
     displayValue = total;
   }
 
@@ -89,7 +89,9 @@ function deleteChar() {
     display.value = display.value.slice(0, -1);
   }
 }
+
 container.addEventListener("click", (event) => {
+  if (event.target === display) return;
   const buttonTypes = {
     number: appendChar,
     arithmetic: operate,
@@ -100,3 +102,20 @@ container.addEventListener("click", (event) => {
   currentBtnType = getButtonType(currentBtn);
   buttonTypes[currentBtnType](currentBtn.textContent);
 });
+
+display.addEventListener("keydown", (event) => {
+  event.preventDefault();
+  const key = event.key;
+
+  if (/[0-9\.]/.test(key)) {
+    appendChar(key);
+  } else if (/[+\-*/%]/.test(key)) {
+    operate(key);
+  } else if (key === "Enter") {
+    operate("=");
+  } else if (key === "Backspace") {
+    deleteChar();
+  }
+});
+
+display.addEventListener("paste", (event) => event.preventDefault());
