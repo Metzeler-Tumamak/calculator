@@ -14,9 +14,9 @@ function processArithmethic(a, operator, b) {
       return a + b;
     case "-":
       return a - b;
-    case "*":
+    case "x":
       return a * b;
-    case "/":
+    case "÷":
       return a / b;
     case "%":
       return a % b;
@@ -40,10 +40,8 @@ function appendChar(char) {
   let displayValue = display.value + char;
 
   const operandRegExp = /\d+\.{0,1}\d*/g;
-  const operatorRegExp = /[+\-*/%]/;
-
+  const operatorRegExp = /[+\-x÷%]/;
   const displayValueArr = displayValue.match(operandRegExp);
-
   const lessThanOneFloat = /^\d+\./;
 
   if (displayValueArr.length > 1) {
@@ -61,7 +59,7 @@ function appendChar(char) {
 
 function operate(operator) {
   let displayValue = display.value;
-  const expressionRegExp = /(\d+\.*\d*)\s([+\-*/%])\s(\d+\.*\d*)/;
+  const expressionRegExp = /(\d+\.*\d*)\s([+\-x÷%])\s(\d+\.*\d*)/;
   const expression = displayValue.match(expressionRegExp);
 
   if (expression) {
@@ -111,7 +109,7 @@ display.addEventListener("keydown", (event) => {
 
   if (/[0-9\.]/.test(key)) {
     appendChar(key);
-  } else if (/[+\-*/%]/.test(key)) {
+  } else if (/[+\-x÷%]/.test(key)) {
     operate(key);
   } else if (key === "Enter") {
     operate("=");

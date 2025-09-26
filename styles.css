@@ -6,30 +6,57 @@
 
 body {
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui;
 }
 
 .flex {
   display: flex;
+  margin-top: 8px;
+  gap: 8px;
 }
 
 #container {
-  width: 500px;
-  background-color: grey;
-  padding: 32px;
+  width: 200px;
+  background-color: #292929;
+  padding: 12px;
+  border-radius: 12px;
+  color: white;
+}
+
+#container,
+input,
+button {
+  background-color: #282828;
 }
 
 input {
+  all: unset;
   text-align: right;
   width: 100%;
   padding: 8px 0;
-  font-size: 20px;
+  font-size: 36px;
+  color: inherit;
+  margin-top: 16px;
 }
 
 button {
+  all: unset;
+  text-align: center;
   width: 100%;
   padding: 8px;
+  border-radius: 100px;
+  background-color: #515151;
 }
 
-.active {
-  border: 1px solid orange;
+.arithmetic {
+  background-color: #f19a38;
+}
+
+.clear,
+.backspace,
+.modulo {
+  background-color: #707070;
 }
