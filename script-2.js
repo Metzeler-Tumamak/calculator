@@ -2,8 +2,6 @@ const display = document.querySelector("input");
 const container = document.querySelector("#container");
 
 let total = null;
-let lastBtn = null;
-let lastBtnType = null;
 let currentBtn = null;
 let currentBtnType = null;
 
@@ -29,8 +27,8 @@ function getButtonType(btn) {
       return "number";
     case btn.classList.contains("arithmetic"):
       return "arithmetic";
-    case btn.classList.contains("equals"):
-      return "equals";
+    case btn.classList.contains("clear"):
+      return "clear";
   }
 }
 
@@ -97,31 +95,25 @@ function getButtonType(btn) {
 // }
 
 function appendChar(char) {
-  if (currentBtnType === "number") {
-    let displayValue = display.value + char;
+  let displayValue = display.value + char;
 
-    const operandRegExp = /\d+\.{0,1}\d*/g;
-    const operatorRegExp = /[+\-*/]/;
+  const operandRegExp = /\d+\.{0,1}\d*/g;
+  const operatorRegExp = /[+\-*/]/;
 
-    const displayValueArr = displayValue.match(operandRegExp);
+  const displayValueArr = displayValue.match(operandRegExp);
 
-    const lessThanOneFloat = /^0\./;
+  const lessThanOneFloat = /^0\./;
 
-    if (displayValueArr.length > 1) {
-      display.value = displayValueArr
-        .map((elem) =>
-          lessThanOneFloat.test(elem) ? elem : Number(elem).toString()
-        )
-        .join(` ${displayValue.match(operatorRegExp)[0]} `);
-    } else {
-      display.value = lessThanOneFloat.test(displayValueArr[0])
-        ? displayValueArr[0]
-        : String(Number(displayValueArr[0]));
-    }
-  }
-
-  if (currentBtnType === "arithmetic") {
-    operate(char);
+  if (displayValueArr.length > 1) {
+    display.value = displayValueArr
+      .map((elem) =>
+        lessThanOneFloat.test(elem) ? elem : Number(elem).toString()
+      )
+      .join(` ${displayValue.match(operatorRegExp)[0]} `);
+  } else {
+    display.value = lessThanOneFloat.test(displayValueArr[0])
+      ? displayValueArr[0]
+      : String(Number(displayValueArr[0]));
   }
 }
 
@@ -138,8 +130,18 @@ function operate(operator) {
   display.value = operator === "=" ? total : `${displayValue} ${operator} 0`;
 }
 
+function clearDisplay() {
+  display.value = "0";
+  total = null;
+}
+
 container.addEventListener("click", (event) => {
+  const buttonTypes = {
+    number: appendChar,
+    arithmetic: operate,
+    clear: clearDisplay,
+  };
   currentBtn = event.target;
   currentBtnType = getButtonType(currentBtn);
-  appendChar(currentBtn.textContent);
+  buttonTypes[currentBtnType](currentBtn.textContent);
 });
