@@ -29,70 +29,10 @@ function getButtonType(btn) {
       return "arithmetic";
     case btn.classList.contains("clear"):
       return "clear";
+    case btn.classList.contains("backspace"):
+      return "backspace";
   }
 }
-
-// function appendChar(char) {
-//   displayValue = display.value;
-
-//   if (currentBtnType === "number") {
-//     if (char === ".") {
-//       const isLeftHandOperand = !/[+\-*/]/.test(displayValue);
-
-//       if (isLeftHandOperand) {
-//         if (displayValue.includes(".")) return;
-//       } else {
-//         if (displayValue.split(/\s[+\-*/]/)[1].includes(".")) {
-//           return;
-//         }
-//       }
-//     }
-
-//     displayValue += char;
-
-//     // const regExp = /^0\./;
-//     // if (displayValue.startsWith("0") && !regExp.test(displayValue)) {
-//     //   display.value = char;
-//     // } else {
-//     //   display.value = displayValue;
-//     // }
-//     // let regExp = /^0\./;
-
-//     // if (displayValue.startsWith("0") && !regExp.test(displayValue)) {
-//     //   display.value = char;
-//     // } else {
-//     //     regExp = /\.$/;
-//     //     display.value = displayValue.replace(regExp, "0.");
-
-//     //   display.value = displayValue;
-//     // }
-
-//     let regExp = /^0\./;
-//     if (isLeftHandOperand) {
-//       if (!regExp.test(displayValue)) {
-//         display.value = String(Number(displayValue));
-//       }
-//     } else {
-//       const expressionArr = displayValue.test;
-//     }
-//   }
-
-//   if (currentBtnType === "arithmetic") {
-//     const expression = displayValue.match(
-//       /(\d+\.*\d*)\s([+\-*/])\s(\d+\.*\d*)/
-//     );
-//     console.table(expression);
-
-//     if (expression) {
-//       total = processArithmethic(...expression.slice(1));
-//       displayValue = total;
-//     }
-//     display.value = char === "=" ? total : `${displayValue} ${char} 0`;
-//   }
-
-//   lastBtn = currentBtn;
-//   lastBtnType = currentBtnType;
-// }
 
 function appendChar(char) {
   let displayValue = display.value + char;
@@ -135,11 +75,23 @@ function clearDisplay() {
   total = null;
 }
 
+function deleteChar() {
+  const lastChar = display.value.at(-1);
+
+  if (lastChar === " ") {
+    const operandRegExp = /\d+\.{0,1}\d*/g;
+
+    display.value = display.value.match(operandRegExp)[0];
+  } else {
+    display.value = display.value.slice(0, -1);
+  }
+}
 container.addEventListener("click", (event) => {
   const buttonTypes = {
     number: appendChar,
     arithmetic: operate,
     clear: clearDisplay,
+    backspace: deleteChar,
   };
   currentBtn = event.target;
   currentBtnType = getButtonType(currentBtn);
