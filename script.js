@@ -91,7 +91,13 @@ function deleteChar() {
 }
 
 container.addEventListener("click", (event) => {
-  if (event.target === display) return;
+  if (event.target === display) {
+    event.target.setSelectionRange(
+      event.target.value.length,
+      event.target.value.length
+    );
+    return;
+  }
   const buttonTypes = {
     number: appendChar,
     arithmetic: operate,
@@ -101,6 +107,8 @@ container.addEventListener("click", (event) => {
   currentBtn = event.target;
   currentBtnType = getButtonType(currentBtn);
   buttonTypes[currentBtnType](currentBtn.textContent);
+
+  display.scrollLeft = display.scrollWidth;
 });
 
 display.addEventListener("keydown", (event) => {
@@ -116,6 +124,8 @@ display.addEventListener("keydown", (event) => {
   } else if (key === "Backspace") {
     deleteChar();
   }
+
+  display.scrollLeft = display.scrollWidth;
 });
 
 display.addEventListener("paste", (event) => event.preventDefault());
